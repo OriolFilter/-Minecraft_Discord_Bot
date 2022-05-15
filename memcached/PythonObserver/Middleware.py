@@ -103,7 +103,8 @@ class MemcachedCli(_CLI):
             memcache_cli.set(key, value)
         memcache_cli.set("last_insert", datetime.now())
 
-    def get_from_memcached(self, key: str):
+    def \
+            get_from_memcached(self, key: str):
         memcache_cli = bmemcached.Client(
             [f'{self.__config.hostname}:{self.__config.port}'],
             username=self.__config.username,
