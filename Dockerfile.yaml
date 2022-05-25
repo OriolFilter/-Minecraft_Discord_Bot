@@ -1,0 +1,25 @@
+FROM python:alpine
+LABEL "author"="Oriol Filter Anson"
+LABEL "version"="1.0"
+LABEL "description"="Discord bot for minecraft server through Query connection"
+
+ENV MINECRAFT_HOSTNAME=
+ENV MINECRAFT_QUERY_PORT=25556
+ENV MINECRAFT_RCON_PORT=25575
+
+ENV MEMCACHED_HOSTNAME=
+ENV MEMCACHED_PORT=11211
+ENV MEMCACHED_USERNAME="my_user"
+ENV MEMCACHED_PASSWORD="my_password"
+
+ENV DISCORD_TOKEN=
+ENV DISCORD_PREFIX="mc."
+ENV DISCORD_DESCRIPTION="Welcome welcome, I'm a bot"
+ENV DISCORD_MC_URL="url.domain.com:port"
+
+
+WORKDIR /main
+ADD ./BabyYoda /main
+USER 1000:1000
+RUN pip install ./requirements.txt
+

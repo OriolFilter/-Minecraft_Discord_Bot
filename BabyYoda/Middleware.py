@@ -8,13 +8,13 @@ import bmemcached
 
 
 class MemcachedCli:
-    __config: MemcachedConfig
+    __config: MemcachedConf
 
     def __init__(self, config=None):
         if config:
             self.__config = config
 
-    def set_config(self, config: MemcachedConfig):
+    def set_config(self, config: MemcachedConf):
 
         self.__config = config
 
@@ -46,9 +46,9 @@ class MemcachedCli:
         :param data: dictionary or QueryFullStats, Data to insert
         :return: None
         """
+        print(f'[MEMCACHED] >> Inserting data')
         if isinstance(data, QueryFullStats):
             data = dict(data.__hash__())
-        print(data)
         bmemcache_cli = bmemcached.Client(
             [f'{self.__config.hostname}:{self.__config.port}'],
             username=self.__config.username,
@@ -71,13 +71,13 @@ class MemcachedCli:
 
 
 class MinecraftCli:
-    __config: MinecraftConfig
+    __config: MinecraftConf
 
     def __init__(self, config=None):
         if config:
             self.__config = config
 
-    def set_config(self, config: MinecraftConfig):
+    def set_config(self, config: MinecraftConf):
         self.__config = config
 
     def get_full_stats(self) -> QueryFullStats:
@@ -98,7 +98,8 @@ class Middleware:
     minecraft: MinecraftCli = None
     cooldown: int
 
-    def __init__(self, minecraft_conf: MinecraftConfig = None, memcached_conf: MemcachedConfig = None, cooldown:int = 10):
+    def __init__(self, minecraft_conf: MinecraftConf = None, memcached_conf: MemcachedConf = None,
+                 cooldown: int = 10):
         self.memcached = MemcachedCli(config=memcached_conf)
         self.minecraft = MinecraftCli(config=minecraft_conf)
         if cooldown: self.cooldown = cooldown
@@ -106,6 +107,7 @@ class Middleware:
         # self.get=self._decorator_get_data(self.get)
 
     # https://stackoverflow.com/questions/1263451/python-decorators-in-classes
+
     def _update_minecraft_data(self) -> bool:
         """
         Queries data from the MC server and inserts it into the Memcached server
@@ -126,9 +128,11 @@ class Middleware:
         @wraps(method)
         def wrapper(self, *args, **kwargs):
             last_insert: datetime = self.memcached.get("last_insert")
+            # self.memcached.
             # result: bool = False
             print(f"> [Middleware]  Last insert '{last_insert}'")
             if not last_insert or last_insert < (datetime.now() - timedelta(seconds=self.cooldown)):
+                print(f'{last_insert} {datetime.now()}')
                 print(">> [Middleware] Requesting data update")
                 self._update_minecraft_data()
             else:
@@ -157,29 +161,7 @@ class Middleware:
 
 
 if __name__ == '__main__':
-    mine_conf = MinecraftConfig(hostname="192.168.1.3", port=5555, query_port=5556)
-    mem_conf = MemcachedConfig(hostname="192.168.1.3", username='my_user', password='my_password')
-    middleware = Middleware(minecraft_conf=mine_conf, memcached_conf=mem_conf)
+    mine_conf = MinecraftConf()
+    mem_conf = MemcachedConf()
+    middleware = Middleware()
     data = middleware.get_full_stats()
-    # print(data)
-    # print(data.motd)
-    txt = '\n' \
-          '`{server_name}`\n' \
-          '```yaml' \
-          'Status: {status}\n' \
-          'Players: {num_players}/{max_players}\n' \
-          'Player_list:' \
-          '{player_list}\n```' \
-          ''.format(status="Online",
-                    server_name=data.motd,
-                    num_players=data.numplayers,
-                    max_players=data.maxplayers,
-                    player_list="".join([f'  - {playername}\n' for playername in data.players]))
-    # print("{x}".format(x=3))
-          # '```'.format(server_name=2,status,2)
-    # print()
-
-    # f'{"\n".join([playername for playername in data.players])}'
-    print(txt)
-    # print(middleware.get(key="players"))
-    # middleware.get_full_stats()
