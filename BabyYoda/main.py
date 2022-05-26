@@ -1,3 +1,5 @@
+#!/bin/python3
+
 from Speaker import Bot
 from Classes import Configuration
 
