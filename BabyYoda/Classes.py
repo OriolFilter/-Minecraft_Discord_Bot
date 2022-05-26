@@ -145,7 +145,7 @@ class Configuration:
     minecraft: MinecraftConf
     discord: DiscordConf
 
-    def __init__(self) -> None:
+    def __init__(self):
         self.memcached = MemcachedConf()
         self.minecraft = MinecraftConf()
         self.discord = DiscordConf()

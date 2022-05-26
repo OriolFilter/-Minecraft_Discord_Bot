@@ -24,6 +24,7 @@ class Bot(commands.Bot):
         print('Logged as')
         print(self.user.name)
         print(self.user.id)
+        print(f'invite me with: https://discord.com/oauth2/authorize?client_id={self.user.id}&permissions=84032&scope=bot')
         print('------')
 
     def __generate_embed(self, *args, **kwargs) -> Embed:
@@ -81,14 +82,25 @@ class Bot(commands.Bot):
                 self.embed_version(embed)
                 self.embed_player_list(embed)
                 await ctx.send(embed=embed)
-            except TimeoutError:
+            except TimeoutError as e:
+                print(f"[Error] {e}")
                 embed = self.Embed(ok=False)
                 embed.add_field(name="Error connecting to the server",
                                 value="This could be due inactivity on the minecraft "
                                       "server, please ensure the connection and try "
                                       "again later.", inline=False)
-            except bmemcached.exceptions.MemcachedException:
+                await ctx.send(embed=embed)
+
+            except bmemcached.exceptions.MemcachedException as e:
+                print(f"[Error] {e}")
                 embed = self.Embed(ok=False)
                 embed.add_field(name="Error connecting/authenticating to the cache server",
+                                value="Please contact an administrator", inline=False)
+                await ctx.send(embed=embed)
+
+            except Exception as e:
+                print(f"[Unexpected Error] {e}")
+                embed = self.Embed(ok=False)
+                embed.add_field(name="Unexpected error",
                                 value="Please contact an administrator", inline=False)
                 await ctx.send(embed=embed)

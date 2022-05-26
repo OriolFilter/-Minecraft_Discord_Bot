@@ -17,13 +17,13 @@ services:
       MEMCACHED_USERNAME: my_user
       MEMCACHED_PASSWORD: my_password
 
-      DISCORD_TOKEN: "9a98sud89as7u89da7u8s9c98uv9as8du89as89da89s9ucau98s"
+      DISCORD_TOKEN:
       DISCORD_PREFIX: "mc."
       DISCORD_DESCRIPTION: "Welcome welcome, I'm a bot"
       DISCORD_MC_URL: "url.domain.com:port"
 
-    depends_on:
-      - minecraft_discord_memcached
+    networks:
+      my_minecraft_network:
 
   minecraft_discord_memcached:
     image: bitnami/memcached:latest
@@ -33,9 +33,9 @@ services:
       MEMCACHED_PASSWORD: my_password
       MEMCACHED_THREADS: 4
       MEMCACHED_MAX_ITEM_SIZE: 8388608
-    links:
-      - minecraft_discord_bot
-
+    restart: unless-stopped
+    networks:
+      my_minecraft_network:
 
   minecraft_server:
     image: itzg/minecraft-server:latest
@@ -45,24 +45,17 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./data:/data:rw
-    user: "1234:1234"
+    user: "1000:1000"
     ports:
-      - 25565:25565
+          - "25565:25565/tcp"
     environment:
-      MEMORY: 3G
+      EULA: "TRUE"
+      MEMORY: 2G
       TYPE: SPIGOT
       FORCE_REDOWNLOAD: "TRUE"
-      EULA: "TRUE"
-      VERSION: "1.17.1"
-      SERVER_NAME: "Very cool minecraft world"
-      MOTD: "§a.This§b is §ca§d Minecraft §eWorld"
-      ONLINE_MODE: False
-      ENABLE_AUTOPAUSE: True
-      MAX_TICK_TIME: -1
-      ENABLE_QUERY: True
-      #      ENABLE_AUTOPAUSE: "true"
-      #      ENABLE_RCON: "true"
-      #      RCON_PASSWORD: ${RCON_PASSWORD}
-      #      RCON_PORT: 28016
-      #      JVM_OPTS:
+      VERSION: "1.18.2"
+      MOTD: "My minecraft world!"
+      ONLINE_MODE: "FALSE"
+      ENABLE_QUERY: "TRUE"
+      ENABLE_RCON: "FALSE"
     restart: unless-stopped

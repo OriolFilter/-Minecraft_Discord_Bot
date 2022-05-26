@@ -55,7 +55,6 @@ class MemcachedCli:
             password=self.__config.password)
 
         for key, value in data.items():
-            # assert key, value
             print(f"[MEMCACHED] >>> Inserting {key}({value})")
             bmemcache_cli.set(key, value)
 
@@ -82,10 +81,8 @@ class MinecraftCli:
 
     def get_full_stats(self) -> QueryFullStats:
         print("Quering from MC server ...")
-        query_cli = QUERYClient(host=self.__config.hostname,
-                                port=self.__config.query_port,
-                                timeout=5)
-        _full_stats_query: dict = query_cli.get_full_stats()
+        with QUERYClient(host=self.__config.hostname, port=self.__config.query_port, timeout=5) as query_cli:
+            _full_stats_query: dict = query_cli.get_full_stats()
         _full_stats_query["last_insert"] = datetime.now()
         _full_stats_query["connected"] = False
         full_stats_object = QueryFullStats(**dict(_full_stats_query))
@@ -115,6 +112,7 @@ class Middleware:
         """
         print(">>> [Middleware] Updating MC data ...")
         stats = self.minecraft.get_full_stats()
+        print(f">>>> [Middleware] MC stats {stats}")
         self.memcached.set(stats)
         return True
 
@@ -156,8 +154,6 @@ class Middleware:
         for key, value in QueryFullStats():
             result[key] = self.memcached.get(key=key)
         return QueryFullStats(**result)
-
-        # return self.__get(QueryFullStats())
 
 
 if __name__ == '__main__':

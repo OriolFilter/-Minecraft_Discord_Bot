@@ -22,7 +22,12 @@ Decorators
 
 #### https://en.wikipedia.org/wiki/Infinispan
 
+ADD refresh rate
 
+ADD to change the status according to the players
 
+Look for a game invite button
+
+Finish the damm readme
 
 https://readthedocs.org/
