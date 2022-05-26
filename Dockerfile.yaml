@@ -20,7 +20,9 @@ ENV DISCORD_MC_URL="url.domain.com:port"
 
 WORKDIR /main
 ADD ./BabyYoda /main
+chmod +x ./main.py
 USER 1000:1000
 RUN pip install ./requirements.txt
+1
 
-
+ENTRYPOINT ["./main.py"]
