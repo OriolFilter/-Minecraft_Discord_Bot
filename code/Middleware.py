@@ -15,30 +15,27 @@ class MemcachedCli:
             self.__config = config
 
     def set_config(self, config: MemcachedConf):
-
         self.__config = config
 
-    def on_set(method):
-        """
-        Decorator
-        :return:
-        """
+    # def on_set(method):
+    #     """
+    #     Decorator
+    #     :return:
+    #     """
+    #
+    #     @wraps(method)
+    #     def wrapper(self, *args, **kwargs):
+    #         try:
+    #             method(self, args, kwargs)
+    #             ok = True
+    #         except ConnectionError:
+    #             print("Connection with memcached error!!")
+    #             raise ConnectionError
+    #         pass
+    #
+    #     return wrapper
 
-        @wraps(method)
-        def wrapper(self, *args, **kwargs):
-
-            try:
-                method()
-                ok = True
-            except ConnectionError:
-                # self.memcached.set({})
-                print("Connection with memcached error!!")
-                raise ConnectionError
-            pass
-
-        return wrapper
-
-    def set(self, data: dict | QueryFullStats) -> None:
+    def set(self, data: dict | QueryFullStats,*args,**kwargs) -> None:
         """
         If given QueryFullStats it transforms into a dictionary
         Iterates through the object given and inserts the data
@@ -99,9 +96,8 @@ class Middleware:
                  cooldown: int = 10):
         self.memcached = MemcachedCli(config=memcached_conf)
         self.minecraft = MinecraftCli(config=minecraft_conf)
-        if cooldown: self.cooldown = cooldown
-
-        # self.get=self._decorator_get_data(self.get)
+        if cooldown:
+            self.cooldown = cooldown
 
     # https://stackoverflow.com/questions/1263451/python-decorators-in-classes
 
@@ -125,9 +121,9 @@ class Middleware:
 
         @wraps(method)
         def wrapper(self, *args, **kwargs):
+            print("def wrapper")
             last_insert: datetime = self.memcached.get("last_insert")
-            # self.memcached.
-            # result: bool = False
+
             print(f"> [Middleware]  Last insert '{last_insert}'")
             if not last_insert or last_insert < (datetime.now() - timedelta(seconds=self.cooldown)):
                 print(f'{last_insert} {datetime.now()}')
@@ -145,7 +141,6 @@ class Middleware:
 
     @on_get
     def get(self, key) -> int | str | datetime:
-        # Should allow using a list/touple
         return self.__get(key)
 
     @on_get

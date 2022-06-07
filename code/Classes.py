@@ -83,7 +83,6 @@ class MinecraftConf(_CONFIG):
         self.hostname = getenv("MINECRAFT_HOSTNAME") or self.hostname
         self.query_port = getenv("MINECRAFT_QUERY_PORT") or self.query_port
         self.rcon_port = getenv("MINECRAFT_RCON_PORT") or self.rcon_port
-
         return self
 
 
@@ -126,14 +125,13 @@ class DiscordConf(_CONFIG):
     mc_url: str = None
     prefix: str = "!"
     description: str = "Hi, I'm a Bot!\n" \
-                       "*please helpme im stuck in a world of blocks*\n"
+                       "My function is to help you!"
 
     def load_envs(self):
         self.token = getenv("DISCORD_TOKEN") or self.token
         self.mc_url = getenv("DISCORD_MC_URL") or self.mc_url
         self.prefix = getenv("DISCORD_PREFIX") or self.prefix
         self.description = getenv("DISCORD_DESCRIPTION") or self.description
-
         return self
 
 

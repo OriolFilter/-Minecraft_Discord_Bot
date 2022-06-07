@@ -14,11 +14,12 @@ ENV MEMCACHED_PASSWORD=
 
 ENV DISCORD_TOKEN=
 ENV DISCORD_PREFIX="mc."
-ENV DISCORD_DESCRIPTION="Welcome welcome, I'm a bot"
+ENV DISCORD_DESCRIPTION="Hi, I'm a Bot!
+My function is to help you!"
 ENV DISCORD_MC_URL="url.domain.com:port"
 
 
-ADD ./BabyYoda /main
+ADD ./code /main
 WORKDIR /main
 RUN pip3 install -r ./requirements.txt --user
 WORKDIR /main

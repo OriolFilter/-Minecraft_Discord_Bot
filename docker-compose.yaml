@@ -17,7 +17,7 @@ services:
       MEMCACHED_USERNAME: my_user
       MEMCACHED_PASSWORD: my_password
 
-      DISCORD_TOKEN:
+      DISCORD_TOKEN: "my_token"
       DISCORD_PREFIX: "mc."
       DISCORD_DESCRIPTION: "Welcome welcome, I'm a bot"
       DISCORD_MC_URL: "url.domain.com:port"
