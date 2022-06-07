@@ -2,6 +2,7 @@ FROM python:alpine
 LABEL "author"="Oriol Filter Anson"
 LABEL "version"="1.0"
 LABEL "description"="Discord bot for minecraft server through Query connection"
+LABEL "repository"="https://github.com/OriolFilter/Minecraft_Discord_Bot"
 
 ENV MINECRAFT_HOSTNAME=
 ENV MINECRAFT_QUERY_PORT=25565
