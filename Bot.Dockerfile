@@ -15,8 +15,7 @@ ENV MEMCACHED_PASSWORD=
 
 ENV DISCORD_TOKEN=
 ENV DISCORD_PREFIX="mc."
-ENV DISCORD_DESCRIPTION="Hi, I'm a Bot!
-My function is to help you!"
+ENV DISCORD_DESCRIPTION="Hi, I'm a Bot! My function is to help you!"
 ENV DISCORD_MC_URL="url.domain.com:port"
 
 
