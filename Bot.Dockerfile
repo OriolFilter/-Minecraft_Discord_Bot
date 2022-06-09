@@ -18,7 +18,6 @@ ENV DISCORD_PREFIX="mc."
 ENV DISCORD_DESCRIPTION="Hi, I'm a Bot! My function is to help you!"
 ENV DISCORD_MC_URL="url.domain.com:port"
 
-
 ADD ./code /main
 WORKDIR /main
 RUN pip3 install -r ./requirements.txt --user
